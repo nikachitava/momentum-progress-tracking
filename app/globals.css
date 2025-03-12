@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
 @utility container {
+    max-width: 1920px;
     margin-inline: auto;
     padding-inline: 7.5rem;
 }
@@ -15,6 +16,11 @@
     --color-red: #FA4D4D;
     --color-green: #08A508;
     --color-yellow: #F7BC30;
+    --color-grey-shades-greyish: #ADB5BD;
+    --color-grey-shades-validations: #6C757D;
+    --color-grey-shades-subheadlines: #343A40;
+    --color-grey-shades-headlines: #212529;
+    --color-grey-shades-blackish: #0D0F10;
 }
 
 
