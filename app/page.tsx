@@ -1,30 +1,15 @@
 import FilterMenu from "@/components/FilterMenu";
-import { IDepartmentReqResponse } from "@/types/IDepartmentReqResponse";
-import { IEmployeesReqResponse } from "@/types/IEmployeesReqResponse";
-import { IPrioritiesReqResponse } from "@/types/IPrioritiesReqResponse";
+import { getDepartments } from "@/services/data/departments";
+import { getEmployees } from "@/services/data/employees";
+import { getPriorities } from "@/services/data/priorities";
 import React from "react";
 
 const Home = async () => {
-    const departmentsRes = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/departments`
-    );
-    const departments: IDepartmentReqResponse[] = await departmentsRes.json();
-
-    const prioritiesRes = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/priorities`
-    );
-    const priorities: IPrioritiesReqResponse[] = await prioritiesRes.json();
-
-    const employeesRes = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/employees`,
-        {
-            headers: {
-                Authorization: `Bearer ${process.env.NEXT_PUBLIC_BEARER_TOKEN}`,
-                "Content-Type": "application/json",
-            },
-        }
-    );
-    const employees: IEmployeesReqResponse[] = await employeesRes.json();
+    const [departments, priorities, employees] = await Promise.all([
+        getDepartments(),
+        getPriorities(),
+        getEmployees(),
+    ]);
 
     return (
         <main>
