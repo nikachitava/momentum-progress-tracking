@@ -22,12 +22,14 @@ const NavBar = () => {
                         title="თანამშრომლის შექმნა"
                         onClick={clickButton}
                         otherStyles="text-grey-shades-headlines border border-[#8338EC]"
+                        fill={false}
                     />
                     <CustomButton
                         title="შექმენი ახალი დავალება"
                         onClick={clickButton}
                         icon={<FaPlus />}
                         otherStyles="bg-purple-accent text-white"
+                        fill={true}
                     />
                 </div>
             </div>
