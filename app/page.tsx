@@ -1,4 +1,5 @@
 import FilterMenu from "@/components/FilterMenu";
+import TasksProgressSection from "@/components/TasksProgressSection";
 import { getDepartments } from "@/services/data/departments";
 import { getEmployees } from "@/services/data/employees";
 import { getPriorities } from "@/services/data/priorities";
@@ -23,6 +24,8 @@ const Home = async () => {
                     employees={employees}
                 />
             </div>
+
+            <TasksProgressSection />
         </main>
     );
 };
