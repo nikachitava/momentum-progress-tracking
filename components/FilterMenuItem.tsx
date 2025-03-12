@@ -45,7 +45,7 @@ const FilterMenuItem: React.FC<IFilterMenuItem> = ({
                 {title}
             </span>
             {isOpen ? (
-                <FaAngleDown size={14} className="text-purpule-accent" />
+                <FaAngleDown size={14} className="text-purple-accent" />
             ) : (
                 <FaAngleUp size={14} className="text-grey-shades-blackish" />
             )}
