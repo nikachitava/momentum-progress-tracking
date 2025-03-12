@@ -39,7 +39,7 @@ const FilterMenuItem: React.FC<IFilterMenuItem> = ({
         >
             <span
                 className={`font-normal ${
-                    isOpen ? "text-purpule-accent" : "text-grey-shades-blackish"
+                    isOpen ? "text-purple-accent" : "text-grey-shades-blackish"
                 }`}
             >
                 {title}
