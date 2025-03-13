@@ -1,5 +1,5 @@
 import { IPrioritiesReqResponse } from "@/types/IPrioritiesReqResponse";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import DropdownCheckboxItem from "./DropdownCheckboxItem";
 import CustomButton from "./CustomButton";
 import { FilterMenuContext } from "@/context/FilterMenuContext";
@@ -12,12 +12,19 @@ const PriorityDropdownContent = ({
     const { selectedPriorities, setSelectedPriorities } =
         useContext(FilterMenuContext);
 
+    const [tempSelectedPriorities, setTempSelectedPriorities] =
+        useState<IPrioritiesReqResponse[]>(selectedPriorities);
+
     const handleSelect = (priority: IPrioritiesReqResponse) => {
-        setSelectedPriorities((prevSelected) =>
+        setTempSelectedPriorities((prevSelected) =>
             prevSelected.some((p) => p.id === priority.id)
                 ? prevSelected.filter((p) => p.id !== priority.id)
                 : [...prevSelected, priority]
         );
+    };
+
+    const handleConfirmSelection = () => {
+        setSelectedPriorities(tempSelectedPriorities);
     };
 
     const handleContentClick = (e: React.MouseEvent) => {
@@ -33,7 +40,7 @@ const PriorityDropdownContent = ({
                 <DropdownCheckboxItem
                     key={priority.id}
                     title={priority.name}
-                    isSelected={selectedPriorities.some(
+                    isSelected={tempSelectedPriorities.some(
                         (p) => p.id === priority.id
                     )}
                     onSelect={() => handleSelect(priority)}
@@ -43,7 +50,7 @@ const PriorityDropdownContent = ({
             <div className="flex justify-end">
                 <CustomButton
                     title="არჩევა"
-                    onClick={() => {}}
+                    onClick={handleConfirmSelection}
                     otherStyles="bg-purple-accent text-white rounded-[20px] !px-[20px] !py-2"
                     fill={true}
                 />

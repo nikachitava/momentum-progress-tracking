@@ -1,5 +1,5 @@
 import { IEmployeesReqResponse } from "@/types/IEmployeesReqResponse";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import CustomButton from "./CustomButton";
 import DropdownCheckboxItem from "./DropdownCheckboxItem";
 import { FilterMenuContext } from "@/context/FilterMenuContext";
@@ -12,12 +12,19 @@ const EmployeesDropdownContent = ({
     const { selectedEmployees, setSelectedEmployees } =
         useContext(FilterMenuContext);
 
+    const [tempSelectedEmployees, setTempSelectedEmployees] =
+        useState<IEmployeesReqResponse[]>(selectedEmployees);
+
     const handleSelect = (employee: IEmployeesReqResponse) => {
-        setSelectedEmployees((prevSelected) =>
+        setTempSelectedEmployees((prevSelected) =>
             prevSelected.some((emp) => emp.id === employee.id)
                 ? prevSelected.filter((emp) => emp.id !== employee.id)
                 : [...prevSelected, employee]
         );
+    };
+
+    const handleConfirmSelection = () => {
+        setSelectedEmployees(tempSelectedEmployees);
     };
 
     const handleContentClick = (e: React.MouseEvent) => {
@@ -33,7 +40,7 @@ const EmployeesDropdownContent = ({
                 <DropdownCheckboxItem
                     key={employee.id}
                     title={employee.name + " " + employee.surname}
-                    isSelected={selectedEmployees.some(
+                    isSelected={tempSelectedEmployees.some(
                         (emp) => emp.id === employee.id
                     )}
                     onSelect={() => handleSelect(employee)}
@@ -44,7 +51,7 @@ const EmployeesDropdownContent = ({
             <div className="flex justify-end">
                 <CustomButton
                     title="არჩევა"
-                    onClick={() => {}}
+                    onClick={handleConfirmSelection}
                     otherStyles="bg-purple-accent text-white rounded-[20px] !px-[20px] !py-2"
                     fill={true}
                 />

@@ -1,5 +1,5 @@
 import { IDepartmentReqResponse } from "@/types/IDepartmentReqResponse";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import DropdownCheckboxItem from "./DropdownCheckboxItem";
 import CustomButton from "./CustomButton";
 import { FilterMenuContext } from "@/context/FilterMenuContext";
@@ -12,12 +12,19 @@ const DepartmentDropdownContent = ({
     const { selectedDepartments, setSelectedDepartments } =
         useContext(FilterMenuContext);
 
+    const [tempSelectedDepartments, setTempSelectedDepartments] =
+        useState<IDepartmentReqResponse[]>(selectedDepartments);
+
     const handleSelect = (department: IDepartmentReqResponse) => {
-        setSelectedDepartments((prevSelected) =>
+        setTempSelectedDepartments((prevSelected) =>
             prevSelected.some((dep) => dep.id === department.id)
                 ? prevSelected.filter((dep) => dep.id !== department.id)
                 : [...prevSelected, department]
         );
+    };
+
+    const handleConfirmSelection = () => {
+        setSelectedDepartments(tempSelectedDepartments);
     };
 
     const handleContentClick = (e: React.MouseEvent) => {
@@ -35,7 +42,7 @@ const DepartmentDropdownContent = ({
                 <DropdownCheckboxItem
                     key={dep.id}
                     title={dep.name}
-                    isSelected={selectedDepartments.some(
+                    isSelected={tempSelectedDepartments.some(
                         (selectedDep) => selectedDep.id === dep.id
                     )}
                     onSelect={() => handleSelect(dep)}
@@ -45,7 +52,7 @@ const DepartmentDropdownContent = ({
             <div className="flex justify-end">
                 <CustomButton
                     title="არჩევა"
-                    onClick={() => {}}
+                    onClick={handleConfirmSelection}
                     otherStyles="bg-purple-accent text-white rounded-[20px] !px-[20px] !py-2"
                     fill={true}
                 />
