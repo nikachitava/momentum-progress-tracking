@@ -11,8 +11,6 @@ const DropdownCheckboxItem: React.FC<IDropdownCheckboxItem> = ({
         e.stopPropagation();
     };
 
-    console.log("rac mivige icon link:", icon);
-
     return (
         <div onClick={handleClick} className="flex items-center gap-[15px]">
             <div className="relative size-[22px]">
