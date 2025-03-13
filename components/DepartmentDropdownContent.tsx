@@ -12,11 +12,11 @@ const DepartmentDropdownContent = ({
     const { selectedDepartments, setSelectedDepartments } =
         useContext(FilterMenuContext);
 
-    const handleSelect = (id: number) => {
+    const handleSelect = (department: IDepartmentReqResponse) => {
         setSelectedDepartments((prevSelected) =>
-            prevSelected.includes(id)
-                ? prevSelected.filter((depId) => depId !== id)
-                : [...prevSelected, id]
+            prevSelected.some((dep) => dep.id === department.id)
+                ? prevSelected.filter((dep) => dep.id !== department.id)
+                : [...prevSelected, department]
         );
     };
 
@@ -35,8 +35,10 @@ const DepartmentDropdownContent = ({
                 <DropdownCheckboxItem
                     key={dep.id}
                     title={dep.name}
-                    isSelected={selectedDepartments.includes(dep.id)}
-                    onSelect={() => handleSelect(dep.id)}
+                    isSelected={selectedDepartments.some(
+                        (selectedDep) => selectedDep.id === dep.id
+                    )}
+                    onSelect={() => handleSelect(dep)}
                 />
             ))}
 

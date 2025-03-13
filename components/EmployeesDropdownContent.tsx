@@ -12,11 +12,11 @@ const EmployeesDropdownContent = ({
     const { selectedEmployees, setSelectedEmployees } =
         useContext(FilterMenuContext);
 
-    const handleSelect = (id: number) => {
+    const handleSelect = (employee: IEmployeesReqResponse) => {
         setSelectedEmployees((prevSelected) =>
-            prevSelected.includes(id)
-                ? prevSelected.filter((implyId) => implyId !== id)
-                : [...prevSelected, id]
+            prevSelected.some((emp) => emp.id === employee.id)
+                ? prevSelected.filter((emp) => emp.id !== employee.id)
+                : [...prevSelected, employee]
         );
     };
 
@@ -33,8 +33,10 @@ const EmployeesDropdownContent = ({
                 <DropdownCheckboxItem
                     key={employee.id}
                     title={employee.name + " " + employee.surname}
-                    isSelected={selectedEmployees.includes(employee.id)}
-                    onSelect={() => handleSelect(employee.id)}
+                    isSelected={selectedEmployees.some(
+                        (emp) => emp.id === employee.id
+                    )}
+                    onSelect={() => handleSelect(employee)}
                     icon={employee.avatar}
                 />
             ))}

@@ -12,11 +12,11 @@ const PriorityDropdownContent = ({
     const { selectedPriorities, setSelectedPriorities } =
         useContext(FilterMenuContext);
 
-    const handleSelect = (id: number) => {
+    const handleSelect = (priority: IPrioritiesReqResponse) => {
         setSelectedPriorities((prevSelected) =>
-            prevSelected.includes(id)
-                ? prevSelected.filter((priorityId) => priorityId !== id)
-                : [...prevSelected, id]
+            prevSelected.some((p) => p.id === priority.id)
+                ? prevSelected.filter((p) => p.id !== priority.id)
+                : [...prevSelected, priority]
         );
     };
 
@@ -33,8 +33,10 @@ const PriorityDropdownContent = ({
                 <DropdownCheckboxItem
                     key={priority.id}
                     title={priority.name}
-                    isSelected={selectedPriorities.includes(priority.id)}
-                    onSelect={() => handleSelect(priority.id)}
+                    isSelected={selectedPriorities.some(
+                        (p) => p.id === priority.id
+                    )}
+                    onSelect={() => handleSelect(priority)}
                 />
             ))}
 
