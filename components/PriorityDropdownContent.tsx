@@ -1,14 +1,16 @@
 import { IPrioritiesReqResponse } from "@/types/IPrioritiesReqResponse";
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import DropdownCheckboxItem from "./DropdownCheckboxItem";
 import CustomButton from "./CustomButton";
+import { FilterMenuContext } from "@/context/FilterMenuContext";
 
 const PriorityDropdownContent = ({
     priorities,
 }: {
     priorities: IPrioritiesReqResponse[];
 }) => {
-    const [selectedPriorities, setSelectedPriorities] = useState<number[]>([]);
+    const { selectedPriorities, setSelectedPriorities } =
+        useContext(FilterMenuContext);
 
     const handleSelect = (id: number) => {
         setSelectedPriorities((prevSelected) =>

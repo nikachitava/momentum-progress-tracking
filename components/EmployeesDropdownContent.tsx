@@ -1,14 +1,16 @@
 import { IEmployeesReqResponse } from "@/types/IEmployeesReqResponse";
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import CustomButton from "./CustomButton";
 import DropdownCheckboxItem from "./DropdownCheckboxItem";
+import { FilterMenuContext } from "@/context/FilterMenuContext";
 
 const EmployeesDropdownContent = ({
     employees,
 }: {
     employees: IEmployeesReqResponse[];
 }) => {
-    const [selectedEmployees, setSelectedEmployees] = useState<number[]>([]);
+    const { selectedEmployees, setSelectedEmployees } =
+        useContext(FilterMenuContext);
 
     const handleSelect = (id: number) => {
         setSelectedEmployees((prevSelected) =>

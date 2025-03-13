@@ -1,16 +1,16 @@
 import { IDepartmentReqResponse } from "@/types/IDepartmentReqResponse";
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import DropdownCheckboxItem from "./DropdownCheckboxItem";
 import CustomButton from "./CustomButton";
+import { FilterMenuContext } from "@/context/FilterMenuContext";
 
 const DepartmentDropdownContent = ({
     departments,
 }: {
     departments: IDepartmentReqResponse[];
 }) => {
-    const [selectedDepartments, setSelectedDepartments] = useState<number[]>(
-        []
-    );
+    const { selectedDepartments, setSelectedDepartments } =
+        useContext(FilterMenuContext);
 
     const handleSelect = (id: number) => {
         setSelectedDepartments((prevSelected) =>
