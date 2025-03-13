@@ -1,10 +1,17 @@
+import { IDepartmentReqResponse } from "./IDepartmentReqResponse";
+import { IEmployeesReqResponse } from "./IEmployeesReqResponse";
+import { IPrioritiesReqResponse } from "./IPrioritiesReqResponse";
+
 export interface IFilterMenuContext {
-    selectedDepartments: number[];
-    setSelectedDepartments: React.Dispatch<React.SetStateAction<number[]>>;
+    selectedDepartments: IDepartmentReqResponse[];
+    setSelectedDepartments: React.Dispatch<React.SetStateAction<IDepartmentReqResponse[]>>;
+    removeDepartment: (id: number) => void;
 
-    selectedPriorities: number[];
-    setSelectedPriorities: React.Dispatch<React.SetStateAction<number[]>>;
+    selectedPriorities: IPrioritiesReqResponse[];
+    setSelectedPriorities: React.Dispatch<React.SetStateAction<IPrioritiesReqResponse[]>>;
+    removePriority: (id: number) => void;
 
-    selectedEmployees: number[];
-    setSelectedEmployees: React.Dispatch<React.SetStateAction<number[]>>;
+    selectedEmployees: IEmployeesReqResponse[];
+    setSelectedEmployees: React.Dispatch<React.SetStateAction<IEmployeesReqResponse[]>>;
+    removeEmployee: (id: number) => void;
 }
