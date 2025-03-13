@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import NavBar from "@/components/NavBar";
+import { FilterMenuProvider } from "@/context/FilterMenuContext";
 
 const fontFiraGo = localFont({
     src: [
@@ -36,8 +37,10 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body className={`${fontFiraGo.className} antialiased`}>
-                <NavBar />
-                {children}
+                <FilterMenuProvider>
+                    <NavBar />
+                    {children}
+                </FilterMenuProvider>
             </body>
         </html>
     );
