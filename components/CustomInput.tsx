@@ -51,7 +51,7 @@ export const CustomInput: React.FC<ICustomInput> = ({
                             key={requirement.id}
                             className={`flex items-center text-sm ${
                                 value === ""
-                                    ? "text-gray-500"
+                                    ? "text-grey-shades-validations"
                                     : isValid
                                     ? "text-green-600"
                                     : "text-red-600"
@@ -60,13 +60,21 @@ export const CustomInput: React.FC<ICustomInput> = ({
                             <IoCheckmarkSharp
                                 className={`size-4 ${
                                     value === ""
-                                        ? "text-gray-500"
+                                        ? "text-grey-shades-validations"
                                         : isValid
                                         ? "text-green-600"
                                         : "text-red-600"
                                 }`}
                             />
-                            <span className="font-light text-[10px] text-grey-shades-validations">
+                            <span
+                                className={`font-light text-[10px] ${
+                                    value === ""
+                                        ? "text-grey-shades-validations"
+                                        : isValid
+                                        ? "text-green-600"
+                                        : "text-red-600"
+                                } `}
+                            >
                                 {requirement.label}
                             </span>
                         </li>
