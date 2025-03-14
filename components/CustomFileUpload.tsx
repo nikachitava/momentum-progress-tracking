@@ -1,7 +1,7 @@
 import { ICustomFileUpload } from "@/types/ICustomFileUpload";
 import React, { useState, useEffect } from "react";
 import { useFormContext } from "react-hook-form";
-import { IoTrashOutline } from "react-icons/io5";
+import { IoCloudUploadOutline, IoTrashOutline } from "react-icons/io5";
 
 export const CustomFileUpload: React.FC<ICustomFileUpload> = ({
     name,
@@ -17,8 +17,10 @@ export const CustomFileUpload: React.FC<ICustomFileUpload> = ({
     } = useFormContext();
 
     const [preview, setPreview] = useState<string | null>(null);
+    const fileInput = watch(name);
 
-    const file = watch(name);
+    // Extract single file from FileList
+    const file = fileInput instanceof FileList ? fileInput[0] : fileInput;
 
     const allRequirementsValid =
         file instanceof File &&
@@ -43,8 +45,6 @@ export const CustomFileUpload: React.FC<ICustomFileUpload> = ({
         setPreview(null);
     };
 
-    const { ref, onChange, ...restRegisterProps } = register(name);
-
     return (
         <div>
             <label
@@ -55,7 +55,7 @@ export const CustomFileUpload: React.FC<ICustomFileUpload> = ({
             </label>
 
             <div
-                className={`w-full  border border-[#CED4DA] border-dotted bg-white rounded-[6px] cursor-pointer relative ${
+                className={`w-full border bg-white rounded-[6px] cursor-pointer relative ${
                     errors[name]
                         ? "border-red"
                         : allRequirementsValid
@@ -68,24 +68,22 @@ export const CustomFileUpload: React.FC<ICustomFileUpload> = ({
                     type="file"
                     accept={acceptedFileTypes}
                     className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                    ref={ref}
-                    onChange={(e) => {
-                        onChange(e);
-
-                        if (e.target.files && e.target.files[0]) {
-                            setValue(name, e.target.files[0], {
+                    {...register(name, {
+                        onChange: (e) => {
+                            const selectedFile = e.target.files?.[0] || null;
+                            setValue(name, selectedFile, {
                                 shouldValidate: true,
                             });
-                        }
-                    }}
-                    {...restRegisterProps}
+                        },
+                    })}
                 />
 
                 {!preview ? (
                     <div className="flex flex-col items-center justify-center p-8 text-center">
-                        <img src="/upload-image.svg" alt="upload-image-icon" />
-                        <p className="text-sm text-grey-shades-subheadlines">
-                            ატვირთე ფოტო
+                        <IoCloudUploadOutline className="text-gray-400 w-12 h-12 mb-2" />
+                        <p className="text-gray-500">ატვირთეთ სურათი</p>
+                        <p className="text-gray-400 text-sm">
+                            დააკლიკეთ ან ჩააგდეთ ფაილი
                         </p>
                     </div>
                 ) : (
