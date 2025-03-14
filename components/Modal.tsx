@@ -3,6 +3,7 @@
 import React, { useContext } from "react";
 import { ModalContext } from "@/context/ModalContext";
 import { IoClose } from "react-icons/io5";
+import CreateEmployeeForm from "./CreateEmployeeForm";
 
 const Modal = () => {
     const { isModalOpen, toggleModal } = useContext(ModalContext);
@@ -33,9 +34,10 @@ const Modal = () => {
                 </div>
 
                 <div>
-                    <h1 className="font-medium text-[32px] text-grey-shades-headlines text-center">
+                    <h2 className="font-medium text-[32px] text-grey-shades-headlines text-center">
                         თანამშრომლის დამატება
-                    </h1>
+                    </h2>
+                    <CreateEmployeeForm />
                 </div>
             </div>
         </div>
