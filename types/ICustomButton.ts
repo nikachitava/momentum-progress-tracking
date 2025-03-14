@@ -4,4 +4,5 @@ export interface ICustomButton {
     icon?: React.ReactNode;
     fill?: boolean;
     otherStyles?: string;
+    type?: "submit" | "reset" | "button" | undefined;
 }
