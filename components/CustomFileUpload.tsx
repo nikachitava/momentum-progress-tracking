@@ -1,48 +1,47 @@
 import { ICustomFileUpload } from "@/types/ICustomFileUpload";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useFormContext } from "react-hook-form";
-import { IoCloudUploadOutline, IoTrashOutline } from "react-icons/io5";
 
-export const CustomFileUpload: React.FC<ICustomFileUpload> = ({
+const CustomFileUpload: React.FC<ICustomFileUpload> = ({
     name,
     label,
     requirements,
-    acceptedFileTypes = "image/*",
 }) => {
     const {
-        register,
         watch,
         setValue,
         formState: { errors },
     } = useFormContext();
 
     const [preview, setPreview] = useState<string | null>(null);
-    const fileInput = watch(name);
+    const errorMessage = errors[name]?.message as string | undefined;
 
-    // Extract single file from FileList
-    const file = fileInput instanceof FileList ? fileInput[0] : fileInput;
+    const file = watch(name);
 
-    const allRequirementsValid =
-        file instanceof File &&
-        requirements.every((req) => req.validator(file));
-
-    useEffect(() => {
-        if (file instanceof File) {
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const files = event.target.files;
+        if (files && files.length > 0) {
+            const file = files[0];
             const reader = new FileReader();
-            reader.onload = (e) => {
-                setPreview(e.target?.result as string);
+            reader.onloadend = () => {
+                setPreview(reader.result as string);
             };
             reader.readAsDataURL(file);
+            setValue(name, files);
         } else {
             setPreview(null);
+            setValue(name, undefined);
         }
-    }, [file]);
+    };
 
-    const handleDelete = (e: React.MouseEvent) => {
-        e.preventDefault();
-        e.stopPropagation();
-        setValue(name, null, { shouldValidate: true });
+    const currentFile = file && file.length > 0 ? file[0] : null;
+    const allRequirementsValid =
+        currentFile !== null &&
+        requirements.every((req) => req.validator(currentFile));
+
+    const handleRemoveImage = () => {
         setPreview(null);
+        setValue(name, undefined);
     };
 
     return (
@@ -55,7 +54,7 @@ export const CustomFileUpload: React.FC<ICustomFileUpload> = ({
             </label>
 
             <div
-                className={`w-full border bg-white rounded-[6px] cursor-pointer relative ${
+                className={`relative w-full h-32 border border-dashed border-[#CED4DA] rounded-[6px] flex items-center justify-center ${
                     errors[name]
                         ? "border-red"
                         : allRequirementsValid
@@ -66,48 +65,40 @@ export const CustomFileUpload: React.FC<ICustomFileUpload> = ({
                 <input
                     id={name}
                     type="file"
-                    accept={acceptedFileTypes}
-                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                    {...register(name, {
-                        onChange: (e) => {
-                            const selectedFile = e.target.files?.[0] || null;
-                            setValue(name, selectedFile, {
-                                shouldValidate: true,
-                            });
-                        },
-                    })}
+                    accept="image/*"
+                    onChange={handleFileChange}
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                 />
 
-                {!preview ? (
-                    <div className="flex flex-col items-center justify-center p-8 text-center">
-                        <IoCloudUploadOutline className="text-gray-400 w-12 h-12 mb-2" />
-                        <p className="text-gray-500">ატვირთეთ სურათი</p>
-                        <p className="text-gray-400 text-sm">
-                            დააკლიკეთ ან ჩააგდეთ ფაილი
-                        </p>
-                    </div>
-                ) : (
-                    <div className="relative p-2 flex justify-center">
+                {preview ? (
+                    <div className="relative">
                         <img
                             src={preview}
-                            alt="File preview"
-                            className="h-40 object-contain"
+                            alt="Preview"
+                            className="size-[88px] object-cover rounded-full"
                         />
-                        <button
-                            onClick={handleDelete}
-                            className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1"
-                        >
-                            <IoTrashOutline className="w-5 h-5" />
-                        </button>
+                        <img
+                            src="/trash-icon.svg"
+                            alt="trash-icon"
+                            onClick={handleRemoveImage}
+                            className="absolute -bottom-1 -right-1 bg-white rounded-full p-1 border border-grey-shades-validations cursor-pointer"
+                        />
+                    </div>
+                ) : (
+                    <div className="flex flex-col items-center justify-center text-center">
+                        <img src="/upload-image.svg" alt="upload-image-icon" />
+                        <span className="text-sm text-grey-shades-subheadlines">
+                            ატვირთე ფოტო
+                        </span>
                     </div>
                 )}
             </div>
 
-            {errors[name] && (
-                <p className="mt-1 text-sm text-red-600">
-                    {errors[name]?.message?.toString()}
-                </p>
+            {errorMessage && (
+                <p className="mt-1 text-sm text-red">{errorMessage}</p>
             )}
         </div>
     );
 };
+
+export default CustomFileUpload;

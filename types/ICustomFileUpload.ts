@@ -6,5 +6,4 @@ export interface ICustomFileUpload {
         label: string;
         validator: (file: File | null) => boolean;
     }[];
-    acceptedFileTypes?: string;
 }
