@@ -4,8 +4,13 @@ import React, { useContext } from "react";
 import { ModalContext } from "@/context/ModalContext";
 import { IoClose } from "react-icons/io5";
 import CreateEmployeeForm from "./CreateEmployeeForm";
+import { IDepartmentReqResponse } from "@/types/IDepartmentReqResponse";
 
-const Modal = () => {
+interface IModal {
+    departments: IDepartmentReqResponse[];
+}
+
+const Modal: React.FC<IModal> = ({ departments }) => {
     const { isModalOpen, toggleModal } = useContext(ModalContext);
 
     if (!isModalOpen) return null;
@@ -37,7 +42,7 @@ const Modal = () => {
                     <h2 className="font-medium text-[32px] text-grey-shades-headlines text-center">
                         თანამშრომლის დამატება
                     </h2>
-                    <CreateEmployeeForm />
+                    <CreateEmployeeForm departments={departments} />
                 </div>
             </div>
         </div>

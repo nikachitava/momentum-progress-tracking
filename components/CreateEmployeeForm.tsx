@@ -10,8 +10,13 @@ import {
 import { CustomInput } from "./CustomInput";
 import { CustomSelectOption } from "./CustomSelectOption";
 import CustomFileUpload from "./CustomFileUpload";
+import { IDepartmentReqResponse } from "@/types/IDepartmentReqResponse";
 
-const CreateEmployeeForm: React.FC = () => {
+interface ICreateEmployeeForm {
+    departments: IDepartmentReqResponse[];
+}
+
+const CreateEmployeeForm: React.FC<ICreateEmployeeForm> = ({ departments }) => {
     const methods = useForm<CreateEmployeeFormSchemaType>({
         resolver: zodResolver(createEmployeeFormSchema),
         mode: "onChange",
@@ -40,6 +45,11 @@ const CreateEmployeeForm: React.FC = () => {
             console.log(`${key}:`, value);
         }
     };
+
+    const departmentOptions = departments.map((dept) => ({
+        value: dept.id.toString(),
+        label: dept.name,
+    }));
 
     return (
         <FormProvider {...methods}>
@@ -131,14 +141,7 @@ const CreateEmployeeForm: React.FC = () => {
                             name="departmentId"
                             label="დეპარტამენტი"
                             placeholder=""
-                            options={[
-                                {
-                                    value: "1",
-                                    label: "ინფორმაციული ტექნოლოგიები",
-                                },
-                                { value: "2", label: "ადამიანური რესურსები" },
-                                { value: "3", label: "მენეჯერი" },
-                            ]}
+                            options={departmentOptions}
                             requirements={[
                                 {
                                     id: "required",

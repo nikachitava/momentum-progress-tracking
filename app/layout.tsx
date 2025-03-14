@@ -5,6 +5,7 @@ import NavBar from "@/components/NavBar";
 import { FilterMenuProvider } from "@/context/FilterMenuContext";
 import { ModalProvider } from "@/context/ModalContext";
 import Modal from "@/components/Modal";
+import { getDepartments } from "@/services/data/departments";
 
 const fontFiraGo = localFont({
     src: [
@@ -31,11 +32,12 @@ export const metadata: Metadata = {
     description: "Software to track the progress",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
     children,
 }: Readonly<{
     children: React.ReactNode;
 }>) {
+    const [departments] = await Promise.all([getDepartments()]);
     return (
         <html lang="en">
             <body className={`${fontFiraGo.className} antialiased`}>
@@ -43,7 +45,7 @@ export default function RootLayout({
                     <FilterMenuProvider>
                         <NavBar />
                         {children}
-                        <Modal />
+                        <Modal departments={departments} />
                     </FilterMenuProvider>
                 </ModalProvider>
             </body>
