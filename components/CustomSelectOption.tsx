@@ -6,7 +6,7 @@ import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 export const CustomSelectOption: React.FC<ICustomSelectOption> = ({
     name,
     label,
-    placeholder = "Select an option",
+    placeholder = "",
     options = [],
     requirements = [],
 }) => {
@@ -48,7 +48,6 @@ export const CustomSelectOption: React.FC<ICustomSelectOption> = ({
         (requirements.length === 0 ||
             requirements.every((req) => req.validator(value)));
 
-    // Register with validation
     const { ref, ...rest } = register(name);
 
     const handleSelect = (optionValue: string) => {
@@ -57,7 +56,11 @@ export const CustomSelectOption: React.FC<ICustomSelectOption> = ({
     };
 
     return (
-        <div>
+        <div
+            className={`relative ${
+                errors[name] ? "border border-red rounded-[6px]" : ""
+            }`}
+        >
             <label
                 htmlFor={name}
                 className="block text-sm font-medium text-grey-shades-subheadlines mb-[3px]"

@@ -8,8 +8,8 @@ import {
     MAX_FILE_SIZE,
 } from "@/schemas/createEmployeeFormSchema";
 import { CustomInput } from "./CustomInput";
-import { CustomFileUpload } from "./CustomFileUpload";
 import { CustomSelectOption } from "./CustomSelectOption";
+import CustomFileUpload from "./CustomFileUpload";
 
 const CreateEmployeeForm: React.FC = () => {
     const methods = useForm<CreateEmployeeFormSchemaType>({
@@ -19,19 +19,26 @@ const CreateEmployeeForm: React.FC = () => {
             firstName: "",
             lastName: "",
             departmentId: "",
+            avatar: undefined,
         },
     });
 
-    const onSubmit = (data: CreateEmployeeFormSchemaType) => {
+    const onSubmit = (data: any) => {
         const formData = new FormData();
         formData.append("firstName", data.firstName);
         formData.append("lastName", data.lastName);
-        if (data.avatar instanceof File) {
-            formData.append("avatar", data.avatar);
-        }
         formData.append("departmentId", data.departmentId);
 
-        console.log("Form submitted:", formData);
+        if (data.avatar && data.avatar.length > 0) {
+            formData.append("avatar", data.avatar[0]);
+        } else {
+            console.error("No avatar file detected in form data.");
+        }
+
+        console.log("Final FormData entries:");
+        for (const [key, value] of formData.entries()) {
+            console.log(`${key}:`, value);
+        }
     };
 
     return (
@@ -95,25 +102,26 @@ const CreateEmployeeForm: React.FC = () => {
                         <CustomFileUpload
                             name="avatar"
                             label="ავატარი *"
-                            acceptedFileTypes="image/jpeg,image/png,image/jpg,image/webp"
                             requirements={[
                                 {
-                                    id: "max-size",
-                                    label: "მაქსიმალური ზომა 600კბ",
-                                    validator: (file) =>
-                                        file
-                                            ? file.size <= MAX_FILE_SIZE
-                                            : false,
+                                    id: "required",
+                                    label: "სურათი სავალდებულოა",
+                                    validator: (file) => file !== null,
                                 },
                                 {
-                                    id: "file-type",
-                                    label: "დასაშვები ფორმატები: JPG, PNG, WEBP",
-                                    validator: (file) =>
-                                        file
-                                            ? ACCEPTED_IMAGE_TYPES.includes(
-                                                  file.type
-                                              )
-                                            : false,
+                                    id: "fileType",
+                                    label: "უნდა იყოს სურათის ტიპის (JPEG, PNG)",
+                                    validator: (file: any) =>
+                                        file &&
+                                        ACCEPTED_IMAGE_TYPES.includes(
+                                            file.type
+                                        ),
+                                },
+                                {
+                                    id: "fileSize",
+                                    label: "მაქსიმუმ 600kb ზომაში",
+                                    validator: (file: any) =>
+                                        file && file.size <= MAX_FILE_SIZE,
                                 },
                             ]}
                         />
