@@ -89,13 +89,17 @@ export const CustomSelectOption: React.FC<ICustomSelectOption> = ({
                             : "border-[#CED4DA]"
                     }`}
                 >
-                    <span className={selectedLabel ? "" : "text-gray-400"}>
+                    <span
+                        className={`text-xs ${
+                            selectedLabel ? "" : "text-grey-shades-validations"
+                        }`}
+                    >
                         {selectedLabel || placeholder}
                     </span>
                     {isOpen ? (
-                        <IoIosArrowUp className="text-gray-400" />
+                        <IoIosArrowUp className="text-grey-shades-validations" />
                     ) : (
-                        <IoIosArrowDown className="text-gray-400" />
+                        <IoIosArrowDown className="text-grey-shades-validations" />
                     )}
                 </button>
 
