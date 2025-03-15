@@ -42,7 +42,10 @@ const Modal: React.FC<IModal> = ({ departments }) => {
                     <h2 className="font-medium text-[32px] text-grey-shades-headlines text-center">
                         თანამშრომლის დამატება
                     </h2>
-                    <CreateEmployeeForm departments={departments} />
+                    <CreateEmployeeForm
+                        departments={departments}
+                        toggleModal={toggleModal}
+                    />
                 </div>
             </div>
         </div>
