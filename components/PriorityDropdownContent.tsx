@@ -33,7 +33,7 @@ const PriorityDropdownContent = ({
 
     return (
         <div
-            className="absolute left-0 right-0 top-full z-20 mt-[11px] w-[688px] border-[0.5px] border-[#8338EC] rounded-[10px] px-[30px] py-10 space-y-[22px] bg-white"
+            className="absolute max-h-[274px] overflow-auto left-0 right-0 top-full z-20 mt-[11px] w-[688px] border-[0.5px] border-[#8338EC] rounded-[10px] px-[30px] py-10 space-y-[22px] bg-white"
             onClick={handleContentClick}
         >
             {priorities.map((priority) => (
