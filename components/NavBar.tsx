@@ -6,11 +6,10 @@ import Link from "next/link";
 import CustomButton from "./CustomButton";
 import { FaPlus } from "react-icons/fa6";
 import { ModalContext } from "@/context/ModalContext";
+import { useRouter } from "next/navigation";
 
 const NavBar = () => {
-    const clickButton = () => {
-        console.log("clickeed");
-    };
+    const router = useRouter();
 
     const { toggleModal } = useContext(ModalContext);
 
@@ -29,7 +28,7 @@ const NavBar = () => {
                     />
                     <CustomButton
                         title="შექმენი ახალი დავალება"
-                        onClick={clickButton}
+                        onClick={() => router.push("/createtask")}
                         icon={<FaPlus />}
                         otherStyles="bg-purple-accent text-white"
                         fill={true}
