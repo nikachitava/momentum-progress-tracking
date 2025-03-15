@@ -12,19 +12,21 @@ const EmployeesDropdownContent = ({
     const { selectedEmployees, setSelectedEmployees } =
         useContext(FilterMenuContext);
 
-    const [tempSelectedEmployees, setTempSelectedEmployees] =
-        useState<IEmployeesReqResponse[]>(selectedEmployees);
+    const [tempSelectedEmployee, setTempSelectedEmployee] =
+        useState<IEmployeesReqResponse | null>(
+            selectedEmployees.length > 0 ? selectedEmployees[0] : null
+        );
 
     const handleSelect = (employee: IEmployeesReqResponse) => {
-        setTempSelectedEmployees((prevSelected) =>
-            prevSelected.some((emp) => emp.id === employee.id)
-                ? prevSelected.filter((emp) => emp.id !== employee.id)
-                : [...prevSelected, employee]
+        setTempSelectedEmployee(
+            tempSelectedEmployee?.id === employee.id ? null : employee
         );
     };
 
     const handleConfirmSelection = () => {
-        setSelectedEmployees(tempSelectedEmployees);
+        setSelectedEmployees(
+            tempSelectedEmployee ? [tempSelectedEmployee] : []
+        );
     };
 
     const handleContentClick = (e: React.MouseEvent) => {
@@ -40,9 +42,7 @@ const EmployeesDropdownContent = ({
                 <DropdownCheckboxItem
                     key={employee.id}
                     title={employee.name + " " + employee.surname}
-                    isSelected={tempSelectedEmployees.some(
-                        (emp) => emp.id === employee.id
-                    )}
+                    isSelected={tempSelectedEmployee?.id === employee.id}
                     onSelect={() => handleSelect(employee)}
                     icon={employee.avatar}
                 />
