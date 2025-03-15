@@ -36,14 +36,14 @@ const FilterMenuSelectedOptions = () => {
                     onRemove={() => removePriority(p.id)}
                 />
             ))}
-            {selectedDepartments.length > 0 ||
+            {(selectedDepartments.length > 0 ||
                 selectedEmployees.length > 0 ||
-                (selectedPriorities.length > 0 && (
-                    <FilterMenuSelectedOptionItem
-                        title="გასუფთავება"
-                        onRemove={clearFilter}
-                    />
-                ))}
+                selectedPriorities.length > 0) && (
+                <FilterMenuSelectedOptionItem
+                    title="გასუფთავება"
+                    onRemove={clearFilter}
+                />
+            )}
         </div>
     );
 };
