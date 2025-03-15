@@ -11,12 +11,18 @@ import { CustomInput } from "./CustomInput";
 import { CustomSelectOption } from "./CustomSelectOption";
 import CustomFileUpload from "./CustomFileUpload";
 import { IDepartmentReqResponse } from "@/types/IDepartmentReqResponse";
+import CustomButton from "./CustomButton";
+import { createEmployee } from "@/actions/createEmployee";
 
 interface ICreateEmployeeForm {
     departments: IDepartmentReqResponse[];
+    toggleModal: () => void;
 }
 
-const CreateEmployeeForm: React.FC<ICreateEmployeeForm> = ({ departments }) => {
+const CreateEmployeeForm: React.FC<ICreateEmployeeForm> = ({
+    departments,
+    toggleModal,
+}) => {
     const methods = useForm<CreateEmployeeFormSchemaType>({
         resolver: zodResolver(createEmployeeFormSchema),
         mode: "onChange",
@@ -28,21 +34,24 @@ const CreateEmployeeForm: React.FC<ICreateEmployeeForm> = ({ departments }) => {
         },
     });
 
-    const onSubmit = (data: any) => {
+    const onSubmit = async (data: CreateEmployeeFormSchemaType) => {
         const formData = new FormData();
-        formData.append("firstName", data.firstName);
-        formData.append("lastName", data.lastName);
-        formData.append("departmentId", data.departmentId);
-
+        formData.append("name", data.firstName);
+        formData.append("surname", data.lastName);
         if (data.avatar && data.avatar.length > 0) {
             formData.append("avatar", data.avatar[0]);
-        } else {
-            console.error("No avatar file detected in form data.");
         }
+        formData.append("department_id", data.departmentId);
 
-        console.log("Final FormData entries:");
-        for (const [key, value] of formData.entries()) {
-            console.log(`${key}:`, value);
+        // for (const [key, value] of formData.entries()) {
+        //     console.log(key, value);
+        // }
+
+        try {
+            await createEmployee(formData);
+            toggleModal();
+        } catch (error) {
+            console.error("Error:", error);
         }
     };
 
@@ -153,12 +162,22 @@ const CreateEmployeeForm: React.FC<ICreateEmployeeForm> = ({ departments }) => {
                     </div>
                 </div>
 
-                <button
-                    type="submit"
-                    className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 mt-6"
-                >
-                    Submit
-                </button>
+                <div className="flex items-center justify-end gap-[22px] mt-[25px]">
+                    <CustomButton
+                        type="button"
+                        onClick={toggleModal}
+                        title="გაუქმება"
+                        fill={false}
+                        otherStyles="border border-[#8338EC] rounded-[5px]"
+                    />
+                    <CustomButton
+                        type="submit"
+                        onClick={() => {}}
+                        title="დაამატე თანამშრომელი"
+                        fill
+                        otherStyles="text-[18px] text-white bg-purple-accent"
+                    />
+                </div>
             </form>
         </FormProvider>
     );
