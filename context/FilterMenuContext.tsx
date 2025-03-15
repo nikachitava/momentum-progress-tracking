@@ -4,7 +4,8 @@ import { IDepartmentReqResponse } from "@/types/IDepartmentReqResponse";
 import { IEmployeesReqResponse } from "@/types/IEmployeesReqResponse";
 import { IFilterMenuContext } from "@/types/IFilterMenuContext";
 import { IPrioritiesReqResponse } from "@/types/IPrioritiesReqResponse";
-import { createContext, useState } from "react";
+import { usePathname } from "next/navigation";
+import { createContext, useEffect, useState } from "react";
 
 const CONTEXT_DEFAULT_VALUES: IFilterMenuContext = {
     selectedDepartments: [],
@@ -31,6 +32,9 @@ export const FilterMenuProvider = ({
 }: Readonly<{
     children: React.ReactNode;
 }>) => {
+    const pathname = usePathname();
+    const storageKey = "filterState";
+
     const [selectedDepartments, setSelectedDepartments] = useState<
         IDepartmentReqResponse[]
     >([]);
@@ -59,6 +63,34 @@ export const FilterMenuProvider = ({
         setSelectedPriorities([]);
         setSelectedEmployees([]);
     };
+
+    useEffect(() => {
+        const savedPathname = localStorage.getItem("filterPathname");
+
+        if (savedPathname === pathname) {
+            const savedState = localStorage.getItem(storageKey);
+            if (savedState) {
+                const parsedState = JSON.parse(savedState);
+                setSelectedDepartments(parsedState.departments || []);
+                setSelectedPriorities(parsedState.priorities || []);
+                setSelectedEmployees(parsedState.employees || []);
+            }
+        } else {
+            localStorage.removeItem(storageKey);
+            localStorage.setItem("filterPathname", pathname);
+        }
+    }, [pathname]);
+
+    useEffect(() => {
+        const filterState = {
+            departments: selectedDepartments,
+            priorities: selectedPriorities,
+            employees: selectedEmployees,
+        };
+
+        localStorage.setItem(storageKey, JSON.stringify(filterState));
+        localStorage.setItem("filterPathname", pathname);
+    }, [selectedDepartments, selectedPriorities, selectedEmployees, pathname]);
 
     return (
         <FilterMenuContext.Provider
