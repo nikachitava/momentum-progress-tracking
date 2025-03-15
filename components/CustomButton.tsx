@@ -8,6 +8,7 @@ const CustomButton: React.FC<ICustomButton> = ({
     icon,
     fill = false,
     otherStyles,
+    type = "submit",
 }) => {
     return (
         <button
@@ -15,6 +16,7 @@ const CustomButton: React.FC<ICustomButton> = ({
                 fill ? "hover:bg-[#B588F4]" : "hover:border-[#B588F4]"
             } ${otherStyles}`}
             onClick={onClick}
+            type={type}
         >
             {icon && <>{icon}</>}
             {title}
