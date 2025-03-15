@@ -10,6 +10,7 @@ const FilterMenuSelectedOptions = () => {
         removeDepartment,
         removeEmployee,
         removePriority,
+        clearFilter,
     } = useContext(FilterMenuContext);
 
     return (
@@ -35,6 +36,14 @@ const FilterMenuSelectedOptions = () => {
                     onRemove={() => removePriority(p.id)}
                 />
             ))}
+            {selectedDepartments.length > 0 ||
+                selectedEmployees.length > 0 ||
+                (selectedPriorities.length > 0 && (
+                    <FilterMenuSelectedOptionItem
+                        title="გასუფთავება"
+                        onRemove={clearFilter}
+                    />
+                ))}
         </div>
     );
 };

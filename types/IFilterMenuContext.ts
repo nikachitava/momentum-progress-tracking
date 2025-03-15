@@ -14,4 +14,6 @@ export interface IFilterMenuContext {
     selectedEmployees: IEmployeesReqResponse[];
     setSelectedEmployees: React.Dispatch<React.SetStateAction<IEmployeesReqResponse[]>>;
     removeEmployee: (id: number) => void;
+
+    clearFilter: () => void;
 }

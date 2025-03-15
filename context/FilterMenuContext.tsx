@@ -18,6 +18,8 @@ const CONTEXT_DEFAULT_VALUES: IFilterMenuContext = {
     selectedEmployees: [],
     setSelectedEmployees: () => {},
     removeEmployee: () => {},
+
+    clearFilter: () => {},
 };
 
 export const FilterMenuContext = createContext<IFilterMenuContext>(
@@ -52,6 +54,12 @@ export const FilterMenuProvider = ({
         setSelectedEmployees((prev) => prev.filter((dep) => dep.id !== id));
     };
 
+    const clearFilter = () => {
+        setSelectedDepartments([]);
+        setSelectedPriorities([]);
+        setSelectedEmployees([]);
+    };
+
     return (
         <FilterMenuContext.Provider
             value={{
@@ -64,6 +72,7 @@ export const FilterMenuProvider = ({
                 selectedEmployees,
                 setSelectedEmployees,
                 removeEmployee,
+                clearFilter,
             }}
         >
             {children}
