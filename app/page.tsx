@@ -13,7 +13,7 @@ const Home = async () => {
     ]);
 
     return (
-        <main>
+        <main className="pb-20">
             <div className="container mt-10">
                 <h1 className="font-semibold text-[34px] text-grey-shades-headlines">
                     დავალების გვერდი
