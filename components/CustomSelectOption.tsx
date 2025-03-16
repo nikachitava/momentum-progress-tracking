@@ -9,18 +9,29 @@ export const CustomSelectOption: React.FC<ICustomSelectOption> = ({
     placeholder = "",
     options = [],
     requirements = [],
+    defaultValue = "",
+    disabled = false,
+    icon = false,
 }) => {
     const {
         register,
         setValue,
         watch,
-        formState: { errors },
+        formState: { errors, isSubmitted },
     } = useFormContext();
 
     const value = watch(name) || "";
     const [isOpen, setIsOpen] = useState(false);
     const [selectedLabel, setSelectedLabel] = useState("");
     const dropdownRef = useRef<HTMLDivElement>(null);
+    const [isInitialized, setIsInitialized] = useState(false);
+
+    useEffect(() => {
+        if (!isInitialized && defaultValue) {
+            setValue(name, defaultValue, { shouldValidate: true });
+            setIsInitialized(true);
+        }
+    }, [defaultValue, name, setValue, isInitialized]);
 
     useEffect(() => {
         const selectedOption = options.find((option) => option.value === value);
@@ -51,19 +62,43 @@ export const CustomSelectOption: React.FC<ICustomSelectOption> = ({
     const { ref, ...rest } = register(name);
 
     const handleSelect = (optionValue: string) => {
-        setValue(name, optionValue, { shouldValidate: true });
-        setIsOpen(false);
+        if (!disabled) {
+            setValue(name, optionValue, { shouldValidate: true });
+            setIsOpen(false);
+        }
+    };
+
+    const toggleDropdown = () => {
+        if (!disabled) {
+            setIsOpen(!isOpen);
+        }
+    };
+
+    const showValidation = isSubmitted;
+
+    const getLabelClassName = () => {
+        if (disabled) return "text-gray-400";
+        if (!showValidation) return "text-grey-shades-subheadlines";
+
+        if (errors[name]) return "text-red";
+        if (allRequirementsValid) return "text-green";
+        return "text-grey-shades-subheadlines";
+    };
+
+    const getBorderClassName = () => {
+        if (disabled) return "border-gray-200 bg-gray-100";
+        if (!showValidation) return "border-[#CED4DA]";
+
+        if (errors[name]) return "border-red";
+        if (allRequirementsValid) return "border-green";
+        return "border-[#CED4DA]";
     };
 
     return (
-        <div
-            className={`relative ${
-                errors[name] ? "border border-red rounded-[6px]" : ""
-            }`}
-        >
+        <div className={`relative`}>
             <label
                 htmlFor={name}
-                className="block text-sm font-medium text-grey-shades-subheadlines mb-[3px]"
+                className={`block text-sm font-medium mb-[3px] ${getLabelClassName()}`}
             >
                 {label}
             </label>
@@ -76,45 +111,82 @@ export const CustomSelectOption: React.FC<ICustomSelectOption> = ({
                     id={name}
                     ref={ref}
                     value={value}
+                    disabled={disabled}
                 />
 
                 <button
                     type="button"
-                    onClick={() => setIsOpen(!isOpen)}
-                    className={`w-full flex items-center justify-between border bg-white rounded-[6px] p-[10px] outline-none ${
-                        errors[name]
-                            ? "border-red"
-                            : allRequirementsValid
-                            ? "border-green"
-                            : "border-[#CED4DA]"
+                    onClick={toggleDropdown}
+                    disabled={disabled}
+                    className={`w-full flex items-center justify-between border rounded-[6px] p-[14px] outline-none ${getBorderClassName()} ${
+                        disabled ? "cursor-not-allowed" : "cursor-pointer"
                     }`}
                 >
-                    <span
-                        className={`text-xs ${
-                            selectedLabel ? "" : "text-grey-shades-validations"
-                        }`}
-                    >
-                        {selectedLabel || placeholder}
-                    </span>
+                    <div className="flex items-center gap-[6px]">
+                        {icon &&
+                            value &&
+                            options.find((opt) => opt.value === value)
+                                ?.icon && (
+                                <img
+                                    src={
+                                        options.find(
+                                            (opt) => opt.value === value
+                                        )?.icon
+                                    }
+                                    alt="icon"
+                                    className="size-[16px] rounded-full bg-center object-cover"
+                                />
+                            )}
+                        <span
+                            className={`text-xs ${
+                                selectedLabel
+                                    ? disabled
+                                        ? "text-gray-400"
+                                        : ""
+                                    : "text-grey-shades-validations"
+                            }`}
+                        >
+                            {selectedLabel || placeholder}
+                        </span>
+                    </div>
                     {isOpen ? (
-                        <IoIosArrowUp className="text-grey-shades-validations" />
+                        <IoIosArrowUp
+                            className={
+                                disabled
+                                    ? "text-gray-400"
+                                    : "text-grey-shades-validations"
+                            }
+                        />
                     ) : (
-                        <IoIosArrowDown className="text-grey-shades-validations" />
+                        <IoIosArrowDown
+                            className={
+                                disabled
+                                    ? "text-gray-400"
+                                    : "text-grey-shades-validations"
+                            }
+                        />
                     )}
                 </button>
 
-                {isOpen && (
+                {isOpen && !disabled && (
                     <div className="absolute z-10 w-full mt-1 bg-white border border-[#CED4DA] rounded-[6px] shadow-lg max-h-60 overflow-auto">
                         {options.map((option) => (
                             <div
                                 key={option.value}
                                 onClick={() => handleSelect(option.value)}
-                                className={`p-[10px] cursor-pointer hover:bg-gray-100 ${
+                                className={`flex items-center gap-[6px] p-[10px] cursor-pointer hover:bg-gray-100 ${
                                     option.value === value
                                         ? "bg-gray-50 font-medium"
                                         : ""
                                 }`}
                             >
+                                {icon && (
+                                    <img
+                                        src={option.icon}
+                                        alt="icon"
+                                        className="size-[28px] rounded-full bg-center object-cover"
+                                    />
+                                )}
                                 {option.label}
                             </div>
                         ))}
@@ -122,7 +194,7 @@ export const CustomSelectOption: React.FC<ICustomSelectOption> = ({
                 )}
             </div>
 
-            {errors[name] && (
+            {errors[name] && showValidation && !disabled && (
                 <p className="mt-1 text-xs text-red">
                     {errors[name]?.message?.toString()}
                 </p>
