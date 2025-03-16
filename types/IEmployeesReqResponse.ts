@@ -3,5 +3,8 @@ export interface IEmployeesReqResponse {
     name: string;
     surname: string;
     avatar: string;
-    department_id: number;
+    department: {
+        id: number;
+        name: string;
+    };
 }
