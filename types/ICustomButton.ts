@@ -5,4 +5,5 @@ export interface ICustomButton {
     fill?: boolean;
     otherStyles?: string;
     type?: "submit" | "reset" | "button" | undefined;
+    submitting?: boolean;
 }
