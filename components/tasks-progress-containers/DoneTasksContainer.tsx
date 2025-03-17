@@ -1,6 +1,7 @@
 import { ITasksProgressContainer } from "@/types/ITasksProgressContainer";
 import React from "react";
 import TaskCard from "../TaskCard";
+import Link from "next/link";
 
 const DoneTasksContainer: React.FC<ITasksProgressContainer> = ({
     status,
@@ -13,19 +14,20 @@ const DoneTasksContainer: React.FC<ITasksProgressContainer> = ({
             <div className="bg-blue rounded-[10px] py-[15px] cursor-pointer">
                 <h1 className="text-white text-center">{name}</h1>
             </div>
-            <div className="space-y-[30px] mt-[30px]">
+            <div className="flex flex-col gap-[30px] mt-[30px]">
                 {tasks.map((task) => (
-                    <TaskCard
-                        key={task.id}
-                        avatar={task.employee.avatar}
-                        department={task.department}
-                        description={task.description}
-                        due_date={task.due_date}
-                        name={task.name}
-                        priority={task.priority}
-                        total_comments={task.total_comments}
-                        borderColor={borderColor}
-                    />
+                    <Link href={`/task/${task.id}`} key={task.id}>
+                        <TaskCard
+                            avatar={task.employee.avatar}
+                            department={task.department}
+                            description={task.description}
+                            due_date={task.due_date}
+                            name={task.name}
+                            priority={task.priority}
+                            total_comments={task.total_comments}
+                            borderColor={borderColor}
+                        />
+                    </Link>
                 ))}
             </div>
         </div>
