@@ -10,8 +10,14 @@ const nextConfig: NextConfig = {
         pathname: '/**',
         search: '',
       },
+      {
+        protocol: 'https',
+        hostname: 'api.dicebear.com',
+        port: '',
+        pathname: '/**', 
+      },
     ],
   },
-};
+}
 
 export default nextConfig;
