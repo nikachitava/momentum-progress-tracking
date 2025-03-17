@@ -1,5 +1,6 @@
 import { departmentColors, priorityColors } from "@/constants/colors";
 import { ITaskCard } from "@/types/ITaskCard";
+import { formatDate } from "@/utils/formatDate";
 import clsx from "clsx";
 import React from "react";
 
@@ -13,15 +14,6 @@ const TaskCard: React.FC<ITaskCard> = ({
     total_comments,
     borderColor,
 }) => {
-    const formatDate = (isoDate: string): string => {
-        const date = new Date(isoDate);
-        return date.toLocaleDateString("ka-GE", {
-            day: "numeric",
-            month: "long",
-            year: "numeric",
-        });
-    };
-
     return (
         <div
             className="h-[217px] bg-white border rounded-[15px] p-5"
