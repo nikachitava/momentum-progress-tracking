@@ -1,4 +1,6 @@
+import { departmentColors, priorityColors } from "@/constants/colors";
 import { ITaskCard } from "@/types/ITaskCard";
+import clsx from "clsx";
 import React from "react";
 
 const TaskCard: React.FC<ITaskCard> = ({
@@ -19,6 +21,7 @@ const TaskCard: React.FC<ITaskCard> = ({
             year: "numeric",
         });
     };
+
     return (
         <div
             className="h-[217px] bg-white border rounded-[15px] p-5"
@@ -26,7 +29,12 @@ const TaskCard: React.FC<ITaskCard> = ({
         >
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-[10px]">
-                    <div className="flex items-center gap-1 p-1 rounded-[5px] border-[0.5px] border-pink">
+                    <div
+                        className={clsx(
+                            "flex items-center gap-1 p-1 rounded-[5px] border-[0.5px]",
+                            priorityColors[priority.id]
+                        )}
+                    >
                         <img
                             src={priority.icon}
                             alt="priority_icon"
@@ -36,9 +44,14 @@ const TaskCard: React.FC<ITaskCard> = ({
                             {priority.name}
                         </span>
                     </div>
-                    <div className="bg-yellow rounded-[15px] py-[5px] px-[9px]">
+                    <div
+                        className={clsx(
+                            "rounded-[15px] py-[5px] px-[9px]",
+                            departmentColors[department.id]
+                        )}
+                    >
                         <p className="text-white text-sm font-light">
-                            {department.split(" ")[0]}
+                            {department.name.split(" ")[0]}
                         </p>
                     </div>
                 </div>

@@ -4,7 +4,10 @@ export interface ITaskCard {
         name: string;
         icon: string;
     };
-    department: string;
+    department: {
+        id: number;
+        name: string;
+    };
     due_date: string;
     name: string;
     description: string;

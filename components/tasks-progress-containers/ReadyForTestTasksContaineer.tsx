@@ -18,7 +18,7 @@ const ReadyForTestTasksContaineer: React.FC<ITasksProgressContainer> = ({
                     <TaskCard
                         key={task.id}
                         avatar={task.employee.avatar}
-                        department={task.department.name}
+                        department={task.department}
                         description={task.description}
                         due_date={task.due_date}
                         name={task.name}
