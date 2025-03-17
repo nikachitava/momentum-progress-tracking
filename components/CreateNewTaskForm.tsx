@@ -16,6 +16,7 @@ import { ICreateNewTaskForm } from "@/types/ICreateNewTaskForm";
 import { mapToOptions } from "@/utils/mapToOptions";
 import { createNewTask } from "@/actions/createNewTask";
 import { useRouter } from "next/navigation";
+import AddEmployeeActionOption from "./AddEmployeeActionOption";
 
 const CreateNewTaskForm: React.FC<ICreateNewTaskForm> = ({
     departments,
@@ -163,6 +164,7 @@ const CreateNewTaskForm: React.FC<ICreateNewTaskForm> = ({
                                 options={employeeToOption}
                                 disabled={!isDepartmentSelected}
                                 icon={isDepartmentSelected}
+                                actionOption={<AddEmployeeActionOption />}
                             />
                             <div className="w-1/2">
                                 <CustomDatePicker

@@ -15,4 +15,5 @@ export interface ICustomSelectOption {
     defaultValue?: string;
     disabled?: boolean;
     icon?: boolean;
+    actionOption?: React.ReactNode;
 }

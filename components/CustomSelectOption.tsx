@@ -12,6 +12,7 @@ export const CustomSelectOption: React.FC<ICustomSelectOption> = ({
     defaultValue = "",
     disabled = false,
     icon = false,
+    actionOption,
 }) => {
     const {
         register,
@@ -170,6 +171,7 @@ export const CustomSelectOption: React.FC<ICustomSelectOption> = ({
 
                 {isOpen && !disabled && (
                     <div className="absolute z-10 w-full mt-1 bg-white border border-[#CED4DA] rounded-[6px] shadow-lg max-h-60 overflow-auto">
+                        {actionOption}
                         {options.map((option) => (
                             <div
                                 key={option.value}
