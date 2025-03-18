@@ -47,11 +47,11 @@ const TaskCard: React.FC<ITaskCard> = ({
                         </p>
                     </div>
                 </div>
-                <div>
+                {/* <div>
                     <p className="text-grey-shades-headlines text-xs font-normal">
                         {formatDate(due_date)}
                     </p>
-                </div>
+                </div> */}
             </div>
             <div className="px-[10.5] my-[28px]">
                 <h5 className="font-medium text-[15px] text-grey-shades-headlines">
