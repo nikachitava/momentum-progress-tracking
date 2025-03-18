@@ -23,6 +23,7 @@ export async function updateTaskStatus({ taskId, statusId }: UpdateTaskStatusPar
       throw new Error(errorData.message || 'Failed to update task status');
     }
 
+    revalidatePath('/');
     revalidatePath(`/tasks/${taskId}`);
 
   } catch (error) {
