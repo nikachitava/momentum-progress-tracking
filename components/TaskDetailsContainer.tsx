@@ -159,9 +159,9 @@ const TaskDetailsContainer: React.FC<ITaskDetailsContainer> = ({
                         />
                         <p className="text-[#474747]">დავალების ვადა</p>
                     </div>
-                    {/* <div>
+                    <div>
                         <p>{formatDate(task.due_date)}</p>
-                    </div> */}
+                    </div>
                 </div>
             </div>
         </div>
