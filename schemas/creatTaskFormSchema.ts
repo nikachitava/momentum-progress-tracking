@@ -22,13 +22,13 @@ export const createTaskFormSchema = z.object({
             }
         }),
 
-    priority_id: z.string({ required_error: "აუცილებელია" }),
+    priority_id: z.string({ required_error: "აუცილებელია" }).min(1, "აუცილებელია"),
 
-    status_id: z.string({ required_error: "აუცილებელია" }),
+    status_id: z.string({ required_error: "აუცილებელია" }).min(1, "აუცილებელია"),
 
-    department_id: z.string({ required_error: "აუცილებელია" }),
+    department_id: z.string({ required_error: "აუცილებელია" }).min(1, "აუცილებელია"),
 
-    employee_id: z.string({ required_error: "აუცილებელია" }),
+    employee_id: z.string({ required_error: "აუცილებელია" }).min(1, "აუცილებელია"),
 
     due_date: z.string().refine(
         (date) => {

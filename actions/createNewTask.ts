@@ -17,8 +17,10 @@ export const createNewTask = async (formData: FormData) => {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
+        const data = await response.json();
 
         revalidatePath("/");
+        return { success: true, id: data.id };
     } catch (error) {
         console.error("Error:", error);
     }

@@ -5,7 +5,7 @@ import {
     CreateTaskFormSchemaType,
 } from "@/schemas/creatTaskFormSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React from "react";
+import React, { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { CustomInput } from "./CustomInput";
 import { CustomTextArea } from "./CustomTextArea";
@@ -18,12 +18,28 @@ import { createNewTask } from "@/actions/createNewTask";
 import { useRouter } from "next/navigation";
 import AddEmployeeActionOption from "./AddEmployeeActionOption";
 
+const FORM_STORAGE_KEY = "create_task_form_data";
+
 const CreateNewTaskForm: React.FC<ICreateNewTaskForm> = ({
     departments,
     employees,
     priorities,
     statuses,
 }) => {
+    const router = useRouter();
+
+    const getSavedFormData = (): Partial<CreateTaskFormSchemaType> => {
+        if (typeof window === "undefined") return {};
+
+        try {
+            const savedData = localStorage.getItem(FORM_STORAGE_KEY);
+            return savedData ? JSON.parse(savedData) : {};
+        } catch (error) {
+            console.error("Error loading saved form data:", error);
+            return {};
+        }
+    };
+
     const methods = useForm<CreateTaskFormSchemaType>({
         resolver: zodResolver(createTaskFormSchema),
         mode: "onChange",
@@ -35,18 +51,26 @@ const CreateNewTaskForm: React.FC<ICreateNewTaskForm> = ({
             priority_id: "",
             status_id: "",
             department_id: "",
+            ...getSavedFormData(),
         },
     });
 
     const {
         handleSubmit,
         formState: { isSubmitting },
+        watch,
+        reset,
     } = methods;
 
-    const router = useRouter();
+    const formValues = watch();
+
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            localStorage.setItem(FORM_STORAGE_KEY, JSON.stringify(formValues));
+        }
+    }, [formValues]);
 
     const onSubmit = async (data: CreateTaskFormSchemaType) => {
-        console.log(data);
         const formData = new FormData();
         formData.append("name", data.name);
         formData.append("description", data.description || "");
@@ -57,8 +81,16 @@ const CreateNewTaskForm: React.FC<ICreateNewTaskForm> = ({
         formData.append("status_id", data.status_id);
 
         try {
-            await createNewTask(formData);
-            router.push("/");
+            const response = await createNewTask(formData);
+            console.log("created task: ", response);
+
+            if (response && response.success) {
+                localStorage.removeItem(FORM_STORAGE_KEY);
+
+                reset();
+
+                router.push(`/task/${response.id}`);
+            }
         } catch (error) {
             console.error("Error:", error);
         }
