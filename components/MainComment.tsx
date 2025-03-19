@@ -4,6 +4,7 @@ import { IComment } from "@/types/ICommentsReqResponse";
 import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
 import SubComment from "./SubComment";
+import { createReply } from "@/actions/createComment";
 
 interface IMainComment {
     comment: IComment;
@@ -23,12 +24,20 @@ const MainComment: React.FC<IMainComment> = ({ comment }) => {
     const [showReplyInput, setShowReplyInput] = useState(false);
     const [replyText, setReplyText] = useState("");
     const replyInputRef = useRef<HTMLDivElement>(null);
+    const replyButtonRef = useRef<HTMLDivElement>(null);
+
+    const toggleReplyInput = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        setShowReplyInput((showReplyInput) => !showReplyInput);
+    };
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (
                 replyInputRef.current &&
-                !replyInputRef.current.contains(event.target as Node)
+                !replyInputRef.current.contains(event.target as Node) &&
+                replyButtonRef.current &&
+                !replyButtonRef.current.contains(event.target as Node)
             ) {
                 setShowReplyInput(false);
             }
@@ -43,10 +52,21 @@ const MainComment: React.FC<IMainComment> = ({ comment }) => {
         };
     }, [showReplyInput]);
 
-    const handleReply = () => {
-        console.log("Reply submitted:", replyText, "to comment ID:", id);
-        setReplyText("");
-        setShowReplyInput(false);
+    const [error, setError] = useState("");
+
+    const handleReply = async () => {
+        if (!replyText) return setError("თქვენ არ დაგიწერიათ პასუხი!");
+        if (replyText.trim() === "")
+            return setError("ცარიელ პასუხს ვერ გააგზავნით!");
+
+        try {
+            await createReply(task_id, id, replyText);
+            setReplyText("");
+            setError("");
+            setShowReplyInput(false);
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     return (
@@ -66,8 +86,9 @@ const MainComment: React.FC<IMainComment> = ({ comment }) => {
                     {text}
                 </p>
                 <div
-                    className="flex items-center gap-[6px] mt-[10px]"
-                    onClick={() => setShowReplyInput(!showReplyInput)}
+                    ref={replyButtonRef}
+                    className="flex items-center gap-[6px] mt-[10px] cursor-pointer"
+                    onClick={toggleReplyInput}
                 >
                     <Image
                         src={"/replay-icon.svg"}
@@ -82,7 +103,7 @@ const MainComment: React.FC<IMainComment> = ({ comment }) => {
                 {showReplyInput && (
                     <div
                         ref={replyInputRef}
-                        className="mt-3 w-full rounded-[10px] px-3 pt-[10px] pb-[10px] bg-white border-[0.3px] border-grey-shades-greyish"
+                        className="mt-3 w-[400px] rounded-[10px] px-3 pt-[10px] pb-[10px] bg-white border-[0.3px] border-grey-shades-greyish"
                     >
                         <textarea
                             placeholder="დაწერე პასუხი"
@@ -94,7 +115,7 @@ const MainComment: React.FC<IMainComment> = ({ comment }) => {
                         <div className="flex justify-end">
                             <button
                                 onClick={handleReply}
-                                className="bg-purple-accent text-white rounded-[20px] py-2 px-4 text-sm"
+                                className="bg-purple-accent text-white rounded-[20px] py-2 px-4 text-sm cursor-pointer"
                             >
                                 დააკომენტარე
                             </button>

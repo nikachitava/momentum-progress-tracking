@@ -17,10 +17,10 @@ const SingleTaskPage = async ({
     const statuses = await getStatuses();
 
     return (
-        <div>
+        <div className="min-h-screen">
             <div className="container mt-10 pb-20 flex justify-between">
                 <TaskDetailsContainer task={task} statuses={statuses} />
-                <CommentsSection comments={comments} />
+                <CommentsSection comments={comments} postId={id} />
             </div>
         </div>
     );
