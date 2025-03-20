@@ -40,7 +40,7 @@ export const createEmployeeFormSchema = z.object({
         }),
     departmentId: z.string({
         required_error: "გთხოვთ აირჩიოთ დეპარტამენტი",
-    }),
+    }).min(1, "აუცილებელია"),
 });
 
 export type CreateEmployeeFormSchemaType = z.infer<
