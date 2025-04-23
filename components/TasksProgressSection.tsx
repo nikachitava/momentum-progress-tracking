@@ -96,7 +96,7 @@ const TasksProgressSection: React.FC<ITasksProgressSection> = ({
 
     return (
         <section className="mt-[79px]">
-            <div className="container grid grid-cols-4 gap-[52px]">
+            <div className="container grid grid-cols-1 md:grid-cols-2 lg:md:grid-cols-3 xl:grid-cols-4 gap-[52px]">
                 <ToStartTasksContainer
                     status={statuses[0]}
                     tasks={toStartTasks}

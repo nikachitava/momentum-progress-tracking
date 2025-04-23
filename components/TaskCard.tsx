@@ -16,11 +16,11 @@ const TaskCard: React.FC<ITaskCard> = ({
 }) => {
     return (
         <div
-            className="h-[217px] bg-white border rounded-[15px] p-5"
+            className="bg-white border rounded-[15px] p-4 sm:p-5 h-auto sm:h-[217px] flex flex-col justify-between"
             style={{ borderColor: borderColor, borderWidth: "1px" }}
         >
-            <div className="flex items-center justify-between">
-                <div className="flex items-center gap-[10px]">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+                <div className="flex flex-wrap items-center gap-2 sm:gap-[10px]">
                     <div
                         className={clsx(
                             "flex items-center gap-1 p-1 rounded-[5px] border-[0.5px]",
@@ -30,46 +30,50 @@ const TaskCard: React.FC<ITaskCard> = ({
                         <img
                             src={priority.icon}
                             alt="priority_icon"
-                            className="size-4"
+                            className="w-4 h-4"
                         />
-                        <span className="font-medium color-pink text-xs">
+                        <span className="font-medium text-xs text-pink-500">
                             {priority.name}
                         </span>
                     </div>
                     <div
                         className={clsx(
-                            "rounded-[15px] py-[5px] px-[9px]",
+                            "rounded-[15px] py-[3px] px-[7px] sm:py-[5px] sm:px-[9px]",
                             departmentColors[department.id]
                         )}
                     >
-                        <p className="text-white text-sm font-light">
+                        <p className="text-white text-xs sm:text-sm font-light">
                             {department.name.split(" ")[0]}
                         </p>
                     </div>
                 </div>
-                <div>
-                    <p className="text-grey-shades-headlines text-xs font-normal">
-                        {formatDate(due_date)}
-                    </p>
-                </div>
+                <p className="text-grey-shades-headlines text-xs font-normal whitespace-nowrap">
+                    {formatDate(due_date)}
+                </p>
             </div>
-            <div className="px-[10.5] my-[28px]">
-                <h5 className="font-medium text-[15px] text-grey-shades-headlines">
+
+            <div className="px-[2px] my-4 flex-1">
+                <h5 className="font-medium text-sm sm:text-base text-grey-shades-headlines break-words line-clamp-1">
                     {name}
                 </h5>
-                <p className="text-sm text-grey-shades-subheadlines">
+                <p className="text-xs sm:text-sm text-grey-shades-subheadlines mt-1 break-words line-clamp-2">
                     {description}
                 </p>
             </div>
-            <div className="flex items-center justify-between">
+
+            <div className="flex items-center justify-between mt-auto">
                 <img
                     src={avatar}
                     alt="user_avatar"
-                    className="size-[31px] rounded-full bg-center object-cover"
+                    className="w-8 h-8 sm:size-[31px] rounded-full bg-center object-cover"
                 />
-                <div className="flex items-center gap-[2.5px]">
-                    <img src={"/comment.svg"} alt="comment_icon" />
-                    <span>{total_comments}</span>
+                <div className="flex items-center gap-[4px] text-sm text-gray-600">
+                    <img
+                        src={"/comment.svg"}
+                        alt="comment_icon"
+                        className="w-4 h-4"
+                    />
+                    <span className="text-xs sm:text-sm">{total_comments}</span>
                 </div>
             </div>
         </div>
